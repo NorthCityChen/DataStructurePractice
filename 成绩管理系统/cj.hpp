@@ -1,6 +1,6 @@
 /*
  * @Author: Mr.Sen
- * @LastEditTime: 2020-12-14 15:59:01
+ * @LastEditTime: 2020-12-15 10:05:01
  * @Description: 成绩管理系统的头文件
  * @Website: https://grimoire.cn
  * @Copyright (c) Mr.Sen All rights reserved.
@@ -8,8 +8,6 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-
-template <typename T>
 class System
 {
 private:
@@ -25,14 +23,13 @@ private:
     LinkNode Head;
 
 public:
+    // * 构造函数
     System()
     {
-
         Head = new student;
         Head->next = NULL;
-        // Head.
     }
-
+    // *析构函数
     ~System()
     {
         LinkNode p = this->Head, q = p;
@@ -40,30 +37,47 @@ public:
         {
             q = p;
             p = p->next;
-            // cout << sum(p) << " ";
             delete q;
         }
         delete p;
-        // cout << "Class Destroyed" << endl;
     }
 
-    void forEach()
+    // * 遍历链表
+    void forEach(int config)
     {
+        cout << "==========================" << endl;
         LinkNode p = this->Head;
         while (p->next != NULL)
         {
             p = p->next;
-            cout << sum(p) << " ";
+            if (config == 1)
+            {
+                cout << "学号：" << p->num << endl;
+                cout << "名字：" << p->name << endl;
+                cout << "C语言成绩：" << p->cscore << endl;
+                cout << "英语成绩：" << p->englishscore << endl;
+                cout << "FOX成绩：" << p->foxscore << endl;
+            }
+            if (config == 0)
+            {
+                cout << "名字：" << p->name << endl;
+                cout << "总分：" << sum(p) << endl;
+            }
+            cout << "==========================" << endl;
         }
-        cout << endl;
+        // cout << endl;
     }
 
+    // * 计算当前节点总成绩
     int sum(LinkNode s)
     {
         if (s == NULL)
             return 0;
         return s->cscore + s->englishscore + s->foxscore;
     }
+
+    // * 录入学生信息，同时进行逆序排序
+    // * 保证当前一定是逆序的，避免额外的排序操作
     void add(int n)
     {
         while (n--)
@@ -86,7 +100,6 @@ public:
 
             while (p->next != NULL)
             {
-                cout << "Worked" << endl;
                 if (sum(p->next) <= sum1)
                 {
                     tmp->next = p->next;
@@ -103,8 +116,10 @@ public:
                 cout << tmp->name << "录入成功" << endl;
             }
         }
-        forEach();
+        // forEach();
     }
+
+    // * 查询单个学生信息
     void info()
     {
         int number;
@@ -115,22 +130,23 @@ public:
         while (p->next != NULL)
         {
             p = p->next;
-            // cout << sum(p) << " ";
             if (p->num == number)
             {
-                cout << p->num << endl;
-                cout << p->name << endl;
-                cout << p->cscore << endl;
-                cout << p->englishscore << endl;
-                cout << p->foxscore << endl;
+                cout << "学号：" << p->num << endl;
+                cout << "名字：" << p->name << endl;
+                cout << "C语言成绩：" << p->cscore << endl;
+                cout << "英语成绩：" << p->englishscore << endl;
+                cout << "FOX成绩：" << p->foxscore << endl;
                 break;
             }
         }
-        cout << endl;
+        // cout << endl;
     }
-    void Welcome()
+
+    // * 用于输出欢迎信息
+    void Welcome(string filename)
     {
-        ifstream in("welcome");
+        ifstream in(filename);
         string line;
 
         if (in) // 有该文件
@@ -142,7 +158,8 @@ public:
         }
         else // 没有该文件
         {
-            cout << "ERR" << endl;
+            cout << "File: Welcome NOT FOUND!!!" << endl;
         }
+        return;
     }
 };
