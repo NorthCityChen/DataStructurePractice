@@ -65,37 +65,17 @@ public:
         {
             cout << "\033[35m" << a;
         }
+        if (style == "normal")
+        {
+            cout << a;
+        }
         cout << "\033[0m" << endl;
     }
 };
 
-// void print(string a, string style) // * 用于输出着色
-// {
-//     if (style == "red")
-//     {
-//         cout << "\033[31m" << a;
-//     }
-//     if (style == "blue")
-//     {
-//         cout << "\033[32m" << a;
-//     }
-//     if (style == "yellow")
-//     {
-//         cout << "\033[33m" << a;
-//     }
-//     if (style == "green")
-//     {
-//         cout << "\033[34m" << a;
-//     }
-//     if (style == "purple")
-//     {
-//         cout << "\033[35m" << a;
-//     }
-//     cout << "\033[0m" << endl;
-// }
-
 int result(int bgx, int bgy, int edx, int edy)
 {
+    require<int> console; // javascript 直呼内行 ！！！
     int a, b;
     cout << "路径：" << endl;
     stack<node> s;
@@ -121,7 +101,12 @@ int result(int bgx, int bgy, int edx, int edy)
         for (int j = 0; j < 5; j++)
         {
 
-            cout << "{" << pre[i][j].befx << "," << pre[i][j].befy << "} ";
+            // cout << "{" << pre[i][j].befx << "," << pre[i][j].befy << "} ";
+            // // string output = ;
+            // console.log(pre[i][j].befx, "red");
+            // console.log()
+            // console.log(pre[i][j].befy, "red");
+            console.log()
         }
         cout << endl;
     }
@@ -178,24 +163,21 @@ void bfs(int bgx, int bgy, int edx, int edy)
 
 int main()
 {
-    // freopen("input.in", "r", stdin);
-    // // freopen("output.out","w", stdout);
-    // int bgx, bgy, edx, edy;
-    // cin >> lenx >> leny;
+    freopen("input.in", "r", stdin);
+    // freopen("output.out","w", stdout);
+    int bgx, bgy, edx, edy;
+    cin >> lenx >> leny;
 
-    // for (int i = 0; i < lenx; i++)
-    // {
-    //     for (int j = 0; j < leny; j++)
-    //     {
-    //         scanf("%d", &maps[i][j]);
-    //     }
-    // }
-    // cout << "请输入起点啥的" << endl;
-    // cin >> bgx >> bgy >> edx >> edy;
-    // bfs(bgx, bgy, edx, edy);
-    
-    require <int> console; // javascript 直呼内行 ！！！
-    console.log(12, "red");
+    for (int i = 0; i < lenx; i++)
+    {
+        for (int j = 0; j < leny; j++)
+        {
+            scanf("%d", &maps[i][j]);
+        }
+    }
+    cout << "请输入起点啥的" << endl;
+    cin >> bgx >> bgy >> edx >> edy;
+    bfs(bgx, bgy, edx, edy);
 
     return 0;
 }

@@ -1,105 +1,82 @@
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <cstring>
-#include <queue>
-using namespace std;
+/*
+ * @Author: Mr.Sen
+ * @LastEditTime: 2020-12-16 10:26:50
+ * @Description: 
+ * @Website: https://grimoire.cn
+ * @Copyright (c) Mr.Sen All rights reserved.
+ */
 
-int maze[15][15];
-int vis[15][15];
-int aa[50], bb[50];
-int d[4][2] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-int kx = 0, ky = 0, ex = 4, ey = 4; //开始坐标为（0，0），结束坐标为（4，4）
-int len;
+#include <bits/stdc++.h>
+using namespace std;
 
 struct node
 {
-    int x, y, step;
-} a, nxt, path[105][105]; //a为当前点，next为下一个点，
-//path记录路径 path[][].step记录此点是否已经走过，未走过：0，已走过：1
+    int x;
+    int y;
+};
 
-int check(int s, int t)
+queue<node> todo;
+queue<node> bg;
+int n, m;
+int x2[5] = {1, -1, 0, 0};
+int y2[5] = {0, 0, 1, -1};
+int maps[105][105];
+int walked[105][105];
+//creat a map
+int bfs(int bx, int by)
 {
-    if (s < 0 || s > 4 || t < 0 || t > 4)
-        return 0;
-    if (maze[s][t] == 1)
-        return 0;
-    //	if(vis[s][t]==1)          可以用path[][]数组来记录访问过的点，所以不再单独判断是否访问过
-    //		return 0;
-    return 1;
-}
-
-void shuchu()
-{ //从后向前寻找访问过的点，若正向输出，先存储后输出即可
-    int X, Y, x1, y1;
-    int i = 0;
-    X = ex;
-    Y = ey;
-    aa[i] = X;
-    bb[i] = Y;
-    i++;
-    while (i != len)
+    int ans = 0;
+    maps[bx][by] = 0;
+    todo.push({bx, by});
+    while (!todo.empty())
     {
-        x1 = path[X][Y].x;
-        y1 = path[X][Y].y;
-        X = x1;
-        Y = y1;
-        aa[i] = X;
-        bb[i] = Y;
-        i++;
-    }
-    for (i = len; i >= 0; i--)
-    {
-        printf("(%d, %d)\n", aa[i], bb[i]);
-    }
-}
-
-void bfs()
-{
-    queue<node> q;
-    a.x = kx;
-    a.y = ky;
-    a.step = 0;
-    //	vis[kx][ky]=1;
-    q.push(a);
-    while (!q.empty())
-    {
-        a = q.front();
-        q.pop();
-        for (int l = 0; l < 4; l++)
+        node tmp;
+        tmp = todo.front();
+        todo.pop();
+        ans++;
+        int x3 = tmp.x;
+        int y3 = tmp.y;
+        // cout<<x3<<" "<<y3<<endl;
+        for (int i = 0; i < 4; i++)
         {
-            nxt.x = a.x + d[l][0];
-            nxt.y = a.y + d[l][1];
-            if (!check(nxt.x, nxt.y) || path[nxt.x][nxt.y].step == 1)
-                continue;
-            nxt.step = a.step + 1;
-            path[nxt.x][nxt.y].step = 1; //记录是否走过
-            path[nxt.x][nxt.y].x = a.x;  //到达当前点的前一点的x坐标
-            path[nxt.x][nxt.y].y = a.y;  //到达当前点的前一点的y坐标
-                                         //		vis[nxt.x][nxt.y]=1;
-            q.push(nxt);
-            if (nxt.x == ex && nxt.y == ey)
+            int x = x2[i] + x3;
+            int y = y2[i] + y3;
+            if (x >= 0 && x < n && y >= 0 && y < m && maps[x][y] == 1)
             {
-                len = nxt.step; //当前步数
-                shuchu();
-                return;
+                todo.push({x, y});
+                maps[x][y] = 0;
             }
         }
     }
+    return ans;
 }
-
 int main()
 {
-    //	memset(vis,0,sizeof(vis));
-    memset(path, 0, sizeof(path));
-    for (int i = 0; i < 5; i++)
+    int ans = 0;
+    int bx, by;
+    //load the map
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < m; j++)
         {
-            cin >> maze[i][j];
+            scanf("%d", &maps[i][j]);
+            if (maps[i][j])
+            {
+                bg.push({i, j});
+            }
         }
     }
-    path[kx][ky].step = 0;
-    bfs();
+    while (!bg.empty())
+    {
+        node tmp = bg.front();
+        bg.pop();
+        if (maps[tmp.x][tmp.y])
+        {
+            int res = bfs(tmp.x, tmp.y);
+            ans = max(res, ans);
+        }
+    }
+    cout << ans << endl;
     return 0;
 }
