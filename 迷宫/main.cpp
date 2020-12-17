@@ -1,6 +1,6 @@
 /*
  * @Author: Mr.Sen
- * @LastEditTime: 2020-12-16 11:37:19
+ * @LastEditTime: 2020-12-17 21:59:52
  * @Description: 
  * @Website: https://grimoire.cn
  * @Copyright (c) Mr.Sen All rights reserved.
@@ -37,19 +37,21 @@ int lenx, leny; // 地图长度，宽度
 
 int x2[5] = {1, -1, 0, 0};
 int y2[5] = {0, 0, 1, -1};
+
+// * 定义了一个用来输出的模板类
 template <typename tt>
 class require
 {
 private:
     /* data */
 public:
-    void log(tt a, string style)
+    void log(tt a, string style, string ed)
     {
         if (style == "red")
         {
             cout << "\033[31m" << a;
         }
-        if (style == "blue")
+        if (style == "green")
         {
             cout << "\033[32m" << a;
         }
@@ -57,7 +59,7 @@ public:
         {
             cout << "\033[33m" << a;
         }
-        if (style == "green")
+        if (style == "blue")
         {
             cout << "\033[34m" << a;
         }
@@ -69,54 +71,80 @@ public:
         {
             cout << a;
         }
-        cout << "\033[0m" << endl;
+        if (style == "red-g")
+        {
+            cout << "\033[41m" << a;
+        }
+        if (style == "green-g")
+        {
+            cout << "\033[42m" << a;
+        }
+        if (style == "yellow-g")
+        {
+            cout << "\033[43m" << a;
+        }
+        if (style == "blue-g")
+        {
+            cout << "\033[44m" << a;
+        }
+        if (style == "purple-g")
+        {
+            cout << "\033[45m" << a;
+        }
+        cout << "\033[0m";
+        if (ed == "endl")
+            cout << endl;
     }
 };
 
 int result(int bgx, int bgy, int edx, int edy)
 {
-    require<int> console; // javascript 直呼内行 ！！！
+    require<string> console; // javascript 直呼内行 ！！！
     int a, b;
-    cout << "路径：" << endl;
+    console.log("\n路径演示：\n", "green", "endl");
     stack<node> s;
     s.push({edx, edy});
+    vis[edx][edy] = 1;
     for (int xp = edx, yp = edy;; xp = a, yp = b)
     {
         a = pre[xp][yp].befx;
         b = pre[xp][yp].befy;
-        // s.push({a, b});
         vis[a][b] = 1;
 
         if (a == bgx && b == bgy)
             break;
     }
-    // while (s.size())
-    // {
-    //     cout << s.top().x << "," << s.top().y << endl;
-    //     s.pop();
-    // }
 
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 5; j++)
         {
-
-            // cout << "{" << pre[i][j].befx << "," << pre[i][j].befy << "} ";
-            // // string output = ;
-            // console.log(pre[i][j].befx, "red");
-            // console.log()
-            // console.log(pre[i][j].befy, "red");
-            console.log()
+            if (vis[i][j] == 1)
+            {
+                console.log(" * ", "green-g", "");
+            }
+            else if (vis[i][j] == 0)
+            {
+                console.log(" * ", "blue-g", "");
+            }
+            else
+            {
+                console.log(" * ", "yellow-g", "");
+            }
         }
         cout << endl;
     }
+
+    cout << endl;
+    console.log("* 黄色图块为墙壁", "yellow", "endl");
+    console.log("* 蓝色图块为未通过路径", "blue", "endl");
+    console.log("* 绿色图块为通过路径", "green", "endl");
 
     return 0;
 }
 
 void bfs(int bgx, int bgy, int edx, int edy)
 {
-    cout << "我开始摇滚了" << endl;
     /* 
     * bgx 起点的x值
     * bgy 终点的y值
@@ -130,14 +158,10 @@ void bfs(int bgx, int bgy, int edx, int edy)
 
     while (todo.size())
     {
-        // cout << "cao" << endl;
-
         node tmp = todo.front();
         todo.pop();
         int curx = tmp.x;
         int cury = tmp.y;
-
-        cout << curx << " " << cury << endl;
 
         if (curx == edx && cury == edy)
         {
@@ -151,8 +175,6 @@ void bfs(int bgx, int bgy, int edx, int edy)
             if (x >= 0 && x < lenx && y >= 0 && y < leny && maps[x][y] == 0)
             {
                 todo.push({x, y});
-                cout << "添加：" << x << " " << y << endl;
-
                 maps[x][y] = 1;
                 pre[x][y].befx = curx;
                 pre[x][y].befy = cury;
@@ -166,16 +188,20 @@ int main()
     freopen("input.in", "r", stdin);
     // freopen("output.out","w", stdout);
     int bgx, bgy, edx, edy;
+    cout << "请输入地图的长和宽：" << endl;
     cin >> lenx >> leny;
-
+    cout << "请输入地图：" << endl;
     for (int i = 0; i < lenx; i++)
     {
         for (int j = 0; j < leny; j++)
         {
             scanf("%d", &maps[i][j]);
+            if (maps[i][j] == 1)
+                vis[i][j] = -1;
         }
     }
-    cout << "请输入起点啥的" << endl;
+
+    cout << "请输入起点和终点坐标：{例如：1 1 4 4}" << endl;
     cin >> bgx >> bgy >> edx >> edy;
     bfs(bgx, bgy, edx, edy);
 
