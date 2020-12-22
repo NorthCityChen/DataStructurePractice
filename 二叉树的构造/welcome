@@ -1,0 +1,17 @@
+  ____            _   _____              
+ / ___|___   ___ | | |_   _| __ ___  ___ 
+| |   / _ \ / _ \| |   | || '__/ _ \/ _ \
+| |__| (_) | (_) | |   | || | |  __/  __/
+ \____\___/ \___/|_|   |_||_|  \___|\___|
+                                         
+
+Cool Tree @ Copyright (c) Mr.Sen All rights reserved
+
+[INFO] Loading...
+[INFO] Main Menu:
+
+* 1. 通过先序和中序建立树
+* 2. 通过层次遍历和中序建树
+
+[Type "Help" for more infomation]
+
